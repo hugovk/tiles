@@ -70,9 +70,14 @@
     </div>
   </fieldset>
   <fieldset>
-    <legend>Size</legend>
-    <div><span id="km">x</span> km</div>
-    <div><span id="miles">x</span> miles</div>
+    <legend>Explorer tile</legend>
+    <div><span id="explorer-km">x</span> km</div>
+    <div><span id="explorer-miles">x</span> miles</div>
+  </fieldset>
+  <fieldset>
+    <legend>Squadratinho</legend>
+    <div><span id="squadratinho-km">x</span> km</div>
+    <div><span id="squadratinho-miles">x</span> miles</div>
   </fieldset>
 </form>
 
@@ -80,12 +85,16 @@
 
 <p>Each tile is a standard OpenStreetMap tile at level 14 zoom, and the size depends on your latitude.</p>
 
+<p>Squadrats has smaller "Squadratinho" tiles at level 17 zoom, with 64 per explorer tile.</p>
+
 <p>Thanks and more info:</p>
 <ul>
   <li><a href="https://rideeverytile.com/tiles/how_big_is_a_tile">RideEveryTile: How big is a tile?</a></li>
+  <li><a href="https://rideeverytile.com/faq">RideEveryTile: FAQ</li>
   <li><a href="https://www.cyclingweekly.com/news/latest-news/pedalling-squares-inside-the-world-of-tile-bagging-453912">Pedalling squares: Inside the world of tile-bagging</a></li>
   <li><a href="https://statshunters.com/heatmap/tiles">StatsHunters</a></li>
   <li><a href="https://blog.veloviewer.com/category/explorer/">VeloViewer: Explorer</a></li>
+  <li><a href="https://squadrats.com/">Squadrats</a></li>
 </ul>
 
 
@@ -95,24 +104,33 @@
 <script>
 
   const CIRCUMFERENCE_OF_THE_EARTH = 40075 // km
-  const TILES = 2**14
   const KM_TO_MILES = 0.62137
 
   function toRadians(angle) {
     return angle * (Math.PI / 180)
   }
 
-  function tileIt() {
-    let latitude = document.getElementById('latitude').value
-    if (latitude.length) {
-      // Size = Circumference of Earth * cos(latitude) / 2^14
-      let km = CIRCUMFERENCE_OF_THE_EARTH * Math.cos(toRadians(latitude)) / TILES
+  function tileSizeAtZoom(latitude, zoomLevel) {
+      // Size = Circumference of Earth * cos(latitude) / 2^zoomLevel
+      let tiles = 2 ** zoomLevel
+      let km = CIRCUMFERENCE_OF_THE_EARTH * Math.cos(toRadians(latitude)) / tiles
       let miles = (km * KM_TO_MILES).toFixed(2)
       km = km.toFixed(2)
       console.log(km)
       console.log(miles)
-      document.getElementById('km').innerHTML = km
-      document.getElementById('miles').innerHTML = miles
+
+      return [km, miles]
+  }
+
+  function tileIt() {
+    let latitude = document.getElementById('latitude').value
+    if (latitude.length) {
+      const [explorer_km, explorer_miles] = tileSizeAtZoom(latitude, 14)
+      document.getElementById('explorer-km').innerHTML = explorer_km
+      document.getElementById('explorer-miles').innerHTML = explorer_miles
+      const [squadratinho_km, squadratinho_miles] = tileSizeAtZoom(latitude, 17)
+      document.getElementById('squadratinho-km').innerHTML = squadratinho_km
+      document.getElementById('squadratinho-miles').innerHTML = squadratinho_miles
     }
   }
 
