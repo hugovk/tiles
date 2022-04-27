@@ -2,12 +2,18 @@
 <html lang="en">
 <head>
   <style>
+    :root {
+      --bg-color: #eee;
+      --text-color: #444;
+      --link-color: #0084ff;
+      --link-hover-color: white;
+    }
     body { margin-top:15px; }
     h1 { text-align: center; }
     h1,h2,h3 { line-height:1.2; }
     canvas, body {
-      background-color: #EEEEEE;
-      color: #444;
+      background-color: var(--bg-color);
+      color: var(--text-color);
       font-size: 24px;
       line-height: 1.6;
       margin:40px auto;
@@ -15,15 +21,14 @@
       padding: 0 10px;
     }
     a {
-      color: #0084ff;
+      color: var(--link-color);
       text-decoration: none;
     }
     a:hover,
     a:hover div {
-      /*color: #007b00;*/
-      color: white;
-      background-color: #0084ff;
-      outline: 0.05em solid #0084ff;
+      color: var(--link-hover-color);
+      background-color: var(--link-color);
+      outline: 0.05em solid var(--link-color);
     }
     button, input {
       font-family: Times, serif;
